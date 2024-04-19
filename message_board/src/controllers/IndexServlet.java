@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.List;
+import javax.persistence.EntityManager;
+import models.Message;
+import utils.DBUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class IndexServlet
  */
-@WebServlet("/Index")
+@WebServlet("/index")
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -21,6 +25,16 @@ public class IndexServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        EntityManager em = DBUtil.createEntityManager();
+
+        List<Message> messages = em.createNamedQuery("getAllMessages", Message.class).getResultList();
+        response.getWriter().append(Integer.valueOf(messages.size()).toString());
+
+        em.close();
+    }
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
